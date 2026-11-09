@@ -1,9 +1,23 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
+[System.Serializable]
+public struct GimmickIconEntry
+{
+    public GimmickType type;
+    public Sprite icon;
+}
 
 public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
+
+    [Header("InGame Gimmick Icons")]
+    public GimmickIconEntry[] gimmickIconDatabase; // 6개 기믹 타입별 아이콘 등록
+    public Image[] activeGimmickIconSlots;          // 우측 상단 아이콘 Image 슬롯 3개
+
 
     [Header("UI Text Fields")]
     public Text scoreText;
@@ -13,12 +27,14 @@ public class UIManager : MonoBehaviour
 
     [Header("UI Panels")]
     public GameObject gameStart;
-    public GameObject selectStage;
-    public GameObject inGame;
+    public GameObject selectMode;
+    public GameObject selectPractice;
+    public GameObject inGameUI;
+    public GameObject gamePlay;
     public GameObject gameOver;
     public GameObject stageClearPanel;
 
-    private void Awake()
+    void Awake()
     {
         if (Instance == null)
         {
@@ -63,9 +79,36 @@ public class UIManager : MonoBehaviour
         stageIconImage.gameObject.SetActive(sprite != null);
     }
 
+    // UIManager.cs 내부에 추가
+
+    /// <summary>
+    /// 현재 적용된 기믹 리스트를 받아 우측 상단 아이콘 슬롯을 갱신합니다.
+    /// </summary>
+    public void UpdateActiveGimmickIcons(List<GimmickType> activeGimmicks)
+    {
+        for (int i = 0; i < activeGimmickIconSlots.Length; i++) { activeGimmickIconSlots[i].gameObject.SetActive(false); }
+
+        int count = Mathf.Min(activeGimmicks.Count, activeGimmickIconSlots.Length);
+        for (int i = 0; i < count; i++)
+        {
+            Sprite icon = GetGimmickSprite(activeGimmicks[i]);
+            activeGimmickIconSlots[i].sprite = icon;
+            activeGimmickIconSlots[i].gameObject.SetActive(true);
+        }
+    }
+
+    private Sprite GetGimmickSprite(GimmickType type)
+    {
+        for (int i = 0; i < gimmickIconDatabase.Length; i++)
+        {
+            if (gimmickIconDatabase[i].type == type) { return gimmickIconDatabase[i].icon; }
+        }
+        return null;
+    }
+
     public void ShowGameOver()
     {
-        if (gameOver != null) gameOver.SetActive(true);
+        gameOver.SetActive(true);
     }
 
     public void ShowStageClear()
@@ -83,26 +126,23 @@ public class UIManager : MonoBehaviour
             UpdateLinesUI(0, StageManager.Instance.targetLines);
         }
 
-        SetPanelActive(gameStart, true);
-        SetPanelActive(selectStage, false);
-        SetPanelActive(inGame, false);
-        SetPanelActive(gameOver, false);
-        SetPanelActive(stageClearPanel, false);
+        ShowPanels(gameStart);
     }
 
-    private void SetPanelActive(GameObject panel, bool active)
+    void SetPanelActive(GameObject panel, bool active)
     {
-        if (panel != null) panel.SetActive(active);
+        panel.SetActive(active);
     }
 
-    // 단 하나의 패널만 활성화하고 나머지는 비활성화하는 헬퍼 메서드
-    private void ShowPanel(GameObject targetPanel)
+    void ShowPanels(params GameObject[] targetPanels)
     {
-        SetPanelActive(gameStart, targetPanel == gameStart);
-        SetPanelActive(selectStage, targetPanel == selectStage);
-        SetPanelActive(inGame, targetPanel == inGame);
-        SetPanelActive(gameOver, targetPanel == gameOver);
-        SetPanelActive(stageClearPanel, targetPanel == stageClearPanel);
+        SetPanelActive(gameStart, Array.Exists(targetPanels, p => p == gameStart));
+        SetPanelActive(selectMode, Array.Exists(targetPanels, p => p == selectMode));
+        SetPanelActive(selectPractice, Array.Exists(targetPanels, p => p == selectPractice));
+        SetPanelActive(inGameUI, Array.Exists(targetPanels, p => p == inGameUI));
+        SetPanelActive(gamePlay, Array.Exists(targetPanels, p => p == gamePlay));
+        SetPanelActive(gameOver, Array.Exists(targetPanels, p => p == gameOver));
+        SetPanelActive(stageClearPanel, Array.Exists(targetPanels, p => p == stageClearPanel));
     }
 
     void ResumeTime()
@@ -110,7 +150,6 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1f;
     }
 
-    // 1. 시작하기 (타이틀 화면 -> 스테이지 선택창)
     public void GameStart()
     {
         GoToStageSelect();
@@ -119,7 +158,7 @@ public class UIManager : MonoBehaviour
     public void PlayGame()
     {
         ResumeTime();
-        ShowPanel(inGame);
+        ShowPanels(inGameUI, gamePlay);
     }
 
     public void GoToTitle()
@@ -137,7 +176,16 @@ public class UIManager : MonoBehaviour
     {
         ResumeTime();
         ClearBoardTiles();
-        ShowPanel(selectStage);
+        ShowPanels(selectMode);
+
+        AudioManager.Instance.PlayTitleBGM();
+    }
+
+    public void GoToPracticeStage()
+    {
+        ResumeTime();
+        ClearBoardTiles();
+        ShowPanels(selectPractice);
 
         AudioManager.Instance.PlayTitleBGM();
     }
@@ -145,7 +193,7 @@ public class UIManager : MonoBehaviour
     public void ReStart()
     {
         ResumeTime();
-        ShowPanel(inGame);
+        ShowPanels(inGameUI, gamePlay);
 
         GameManager.Instance.ReStart();
     }

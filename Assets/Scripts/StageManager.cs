@@ -31,6 +31,9 @@ public class StageManager : MonoBehaviour
     public int clearedLines { get; private set; }
     public bool isStageCleared { get; private set; }
 
+    [Header("Active Random Gimmicks (Debug View)")]
+    public List<GimmickType> activeGimmicks = new List<GimmickType>();
+
     private float infectionTimer;
     private float earthquakeTimer;
     private Vector3 originalCameraPos;
@@ -78,11 +81,72 @@ public class StageManager : MonoBehaviour
         infectedTile = data.infectedTile;
         earthquakeInterval = data.earthquakeInterval;
 
+        activeGimmicks.Clear();
+        if (sealIBlock) activeGimmicks.Add(GimmickType.SealIBlock);
+        if (variableDropSpeed) activeGimmicks.Add(GimmickType.VariableDropSpeed);
+        if (isTimeAttack) activeGimmicks.Add(GimmickType.TimeAttack);
+        if (infectedBlock) activeGimmicks.Add(GimmickType.InfectedBlock);
+        if (earthquake) activeGimmicks.Add(GimmickType.Earthquake);
+        if (disableHardDrop) activeGimmicks.Add(GimmickType.DisableHardDrop);
+
         UIManager.Instance.UpdateStageIcon(data.stageIcon);
+        UIManager.Instance.UpdateActiveGimmickIcons(activeGimmicks);
 
         ResetStage();
     }
 
+    public void ApplyRandomModeData(ModeData modeData)
+    {
+        ResetAllGimmickFlags();
+        activeGimmicks.Clear();
+
+        targetLines = modeData.targetLines;
+        timeAttackLimit = modeData.timeAttackLimit;
+        minDropDelay = modeData.minDropDelay;
+        maxDropDelay = modeData.maxDropDelay;
+        infectionInterval = modeData.infectionInterval;
+        earthquakeInterval = modeData.earthquakeInterval;
+
+        List<GimmickType> pool = new List<GimmickType>(modeData.gimmickPool);
+        int pickCount = Mathf.Min(modeData.randomGimmickCount, pool.Count);
+
+        for (int i = 0; i < pickCount; i++)
+        {
+            int randIndex = Random.Range(i, pool.Count);
+            GimmickType selected = pool[randIndex];
+            pool[randIndex] = pool[i];
+            pool[i] = selected;
+
+            activeGimmicks.Add(selected);
+            EnableGimmickFlag(selected);
+        }
+
+        UIManager.Instance.UpdateActiveGimmickIcons(activeGimmicks);
+        Debug.Log($"[{modeData.modeTitle}] 적용된 랜덤 기믹: {string.Join(", ", activeGimmicks)}");
+    }
+
+    void ResetAllGimmickFlags()
+    {
+        sealIBlock = false;
+        variableDropSpeed = false;
+        isTimeAttack = false;
+        infectedBlock = false;
+        earthquake = false;
+        disableHardDrop = false;
+    }
+
+    void EnableGimmickFlag(GimmickType type)
+    {
+        switch (type)
+        {
+            case GimmickType.SealIBlock: sealIBlock = true; break;
+            case GimmickType.VariableDropSpeed: variableDropSpeed = true; break;
+            case GimmickType.TimeAttack: isTimeAttack = true; break;
+            case GimmickType.InfectedBlock: infectedBlock = true; break;
+            case GimmickType.Earthquake: earthquake = true; break;
+            case GimmickType.DisableHardDrop: disableHardDrop = true; break;
+        }
+    }
     public void ResetStage()
     {
         clearedLines = 0;

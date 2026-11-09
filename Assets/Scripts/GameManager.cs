@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
         StageManager.Instance.ResetStage();
         UIManager.Instance.ResetUI();
 
-        if (UIManager.Instance.inGame.activeInHierarchy) { AudioManager.Instance.PlayGameplayBGM(); }
+        if (UIManager.Instance.inGameUI.activeInHierarchy) { AudioManager.Instance.PlayGameplayBGM(); }
         else { AudioManager.Instance.PlayTitleBGM(); }
 
         if (board != null) board.ResetBoard();
