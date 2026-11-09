@@ -1521,6 +1521,7 @@ RectTransform:
   m_Children:
   - {fileID: 1851421176}
   - {fileID: 1017048594}
+  - {fileID: 816964482}
   - {fileID: 1587392526}
   - {fileID: 2106819733}
   - {fileID: 235754836}
@@ -1548,8 +1549,9 @@ MonoBehaviour:
   linesText: {fileID: 727827874}
   stageIconImage: {fileID: 1496917130}
   gameStart: {fileID: 1851421175}
-  selectStage: {fileID: 1017048593}
+  selectPractice: {fileID: 1017048593}
   inGame: {fileID: 1587392525}
+  gamePlay: {fileID: 2019229721}
   gameOver: {fileID: 2106819732}
   stageClearPanel: {fileID: 235754835}
 --- !u!1 &727827872
@@ -1709,6 +1711,143 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 805395814}
+  m_CullTransparentMesh: 1
+--- !u!1 &816964481
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 816964482}
+  - component: {fileID: 816964487}
+  - component: {fileID: 816964486}
+  - component: {fileID: 816964485}
+  - component: {fileID: 816964484}
+  - component: {fileID: 816964483}
+  m_Layer: 5
+  m_Name: SelectMode
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &816964482
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 816964481}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 666449825}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1920, y: 1080}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &816964483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 816964481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce854ef3156b9409589f79ef019e068a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StageSelectUI
+  stageList:
+  - {fileID: 11400000, guid: b95b133c6a093445c94ccb91b761ea8b, type: 2}
+  - {fileID: 11400000, guid: b2aee97fdb515468ca12d6d2f573e26b, type: 2}
+  - {fileID: 11400000, guid: 5e5275147aa6e4ebda7b4fc2e5b5892d, type: 2}
+  - {fileID: 11400000, guid: 32fcdd0cd9e234c668537950eb276d4b, type: 2}
+  - {fileID: 11400000, guid: dd4e6c6433c4f414195bd6658c048c1c, type: 2}
+  - {fileID: 11400000, guid: 244b638ece6934017b145f06b8489fcc, type: 2}
+  stageButtonPrefab: {fileID: 4465426537520589119, guid: f8268d73dc6dc4c6d9a51faec8df1994, type: 3}
+  gridParent: {fileID: 816964482}
+--- !u!114 &816964484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 816964481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.ContentSizeFitter
+  m_HorizontalFit: 0
+  m_VerticalFit: 0
+--- !u!114 &816964485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 816964481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.GridLayoutGroup
+  m_Padding:
+    m_Left: 50
+    m_Right: 50
+    m_Top: 50
+    m_Bottom: 50
+  m_ChildAlignment: 4
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 450, y: 450}
+  m_Spacing: {x: 50, y: 50}
+  m_Constraint: 0
+  m_ConstraintCount: 2
+--- !u!114 &816964486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 816964481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &816964487
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 816964481}
   m_CullTransparentMesh: 1
 --- !u!1 &890160743
 GameObject:
@@ -2085,9 +2224,8 @@ GameObject:
   - component: {fileID: 1017048595}
   - component: {fileID: 1017048598}
   - component: {fileID: 1017048599}
-  - component: {fileID: 1017048597}
   m_Layer: 5
-  m_Name: SelectStage
+  m_Name: SelectPractice
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2150,27 +2288,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1017048593}
   m_CullTransparentMesh: 1
---- !u!114 &1017048597
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1017048593}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce854ef3156b9409589f79ef019e068a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StageSelectUI
-  stageList:
-  - {fileID: 11400000, guid: b95b133c6a093445c94ccb91b761ea8b, type: 2}
-  - {fileID: 11400000, guid: b2aee97fdb515468ca12d6d2f573e26b, type: 2}
-  - {fileID: 11400000, guid: 5e5275147aa6e4ebda7b4fc2e5b5892d, type: 2}
-  - {fileID: 11400000, guid: 32fcdd0cd9e234c668537950eb276d4b, type: 2}
-  - {fileID: 11400000, guid: dd4e6c6433c4f414195bd6658c048c1c, type: 2}
-  - {fileID: 11400000, guid: 244b638ece6934017b145f06b8489fcc, type: 2}
-  stageButtonPrefab: {fileID: 4465426537520589119, guid: f8268d73dc6dc4c6d9a51faec8df1994, type: 3}
-  gridParent: {fileID: 1017048594}
 --- !u!114 &1017048598
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3277,7 +3394,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2019229722}
   - {fileID: 268075728}
   - {fileID: 727827873}
   - {fileID: 103914525}
@@ -3960,7 +4076,7 @@ Transform:
   m_GameObject: {fileID: 2019229721}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -960, y: -540, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3972,7 +4088,7 @@ Transform:
   - {fileID: 578693518}
   - {fileID: 28177733}
   - {fileID: 1062971708}
-  m_Father: {fileID: 1587392526}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2032175920
 GameObject:
@@ -4459,3 +4575,4 @@ SceneRoots:
   - {fileID: 1725046775}
   - {fileID: 1164545380}
   - {fileID: 666449825}
+  - {fileID: 2019229722}

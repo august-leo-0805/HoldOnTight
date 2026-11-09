@@ -1,3 +1,5 @@
+using System;
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,8 +15,9 @@ public class UIManager : MonoBehaviour
 
     [Header("UI Panels")]
     public GameObject gameStart;
-    public GameObject selectStage;
+    public GameObject selectPractice;
     public GameObject inGame;
+    public GameObject gamePlay;
     public GameObject gameOver;
     public GameObject stageClearPanel;
 
@@ -84,8 +87,9 @@ public class UIManager : MonoBehaviour
         }
 
         SetPanelActive(gameStart, true);
-        SetPanelActive(selectStage, false);
+        SetPanelActive(selectPractice, false);
         SetPanelActive(inGame, false);
+        SetPanelActive(gamePlay, false);
         SetPanelActive(gameOver, false);
         SetPanelActive(stageClearPanel, false);
     }
@@ -95,14 +99,25 @@ public class UIManager : MonoBehaviour
         if (panel != null) panel.SetActive(active);
     }
 
-    // 단 하나의 패널만 활성화하고 나머지는 비활성화하는 헬퍼 메서드
-    private void ShowPanel(GameObject targetPanel)
+    // 단 하나의 패널만 활성화하고 나머지는 비활성화하는 기존 헬퍼 메서드
+    void ShowPanel(GameObject targetPanel)
     {
         SetPanelActive(gameStart, targetPanel == gameStart);
-        SetPanelActive(selectStage, targetPanel == selectStage);
+        SetPanelActive(selectPractice, targetPanel == selectPractice);
         SetPanelActive(inGame, targetPanel == inGame);
+        SetPanelActive(gamePlay, targetPanel == gamePlay);
         SetPanelActive(gameOver, targetPanel == gameOver);
         SetPanelActive(stageClearPanel, targetPanel == stageClearPanel);
+    }
+
+    void ShowPanels(params GameObject[] targetPanels)
+    {
+        SetPanelActive(gameStart, Array.Exists(targetPanels, p => p == gameStart));
+        SetPanelActive(selectPractice, Array.Exists(targetPanels, p => p == selectPractice));
+        SetPanelActive(inGame, Array.Exists(targetPanels, p => p == inGame));
+        SetPanelActive(gamePlay, Array.Exists(targetPanels, p => p == gamePlay));
+        SetPanelActive(gameOver, Array.Exists(targetPanels, p => p == gameOver));
+        SetPanelActive(stageClearPanel, Array.Exists(targetPanels, p => p == stageClearPanel));
     }
 
     void ResumeTime()
@@ -110,7 +125,6 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1f;
     }
 
-    // 1. 시작하기 (타이틀 화면 -> 스테이지 선택창)
     public void GameStart()
     {
         GoToStageSelect();
@@ -119,7 +133,7 @@ public class UIManager : MonoBehaviour
     public void PlayGame()
     {
         ResumeTime();
-        ShowPanel(inGame);
+        ShowPanels(inGame, gamePlay);
     }
 
     public void GoToTitle()
@@ -137,7 +151,7 @@ public class UIManager : MonoBehaviour
     {
         ResumeTime();
         ClearBoardTiles();
-        ShowPanel(selectStage);
+        ShowPanel(selectPractice);
 
         AudioManager.Instance.PlayTitleBGM();
     }
@@ -145,7 +159,7 @@ public class UIManager : MonoBehaviour
     public void ReStart()
     {
         ResumeTime();
-        ShowPanel(inGame);
+        ShowPanels(inGame, gamePlay);
 
         GameManager.Instance.ReStart();
     }
